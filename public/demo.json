@@ -1,0 +1,18 @@
+[
+    {
+        "category_id": "01",
+        "img":"https://i.ibb.co/M23fhxm/unsplash-Eh-Tc-C9s-YXsw.png",
+        "name":"Tesla Electric",
+        "location":"Dhaka, Bangladesh",
+        "resale_price":"120",
+        "original_price":"300",
+        "yeasr_of_use":"5",
+        "post_date":"Nov 20, 2022",
+        "seller":"S Sujan",
+        "verified_seller": true,
+        "product_condition": "good",
+        "mobile_number": "01730277227",
+        "description": "Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem ",
+        "purchase_year": "2017"
+    }
+]
