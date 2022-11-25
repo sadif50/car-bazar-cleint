@@ -6,7 +6,7 @@ import signImg from '../../../assets/user/signup.png';
 import { toast } from 'react-toastify';
 
 const Signup = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const { createUserWithEmail, updateInfo } = useContext(AuthContext);
 
     const imageAPIkey = process.env.REACT_APP_imgbb_key;
@@ -51,7 +51,18 @@ const Signup = () => {
 
     }
     const saveUser = userData => {
-        console.log(userData)
+        fetch('http://localhost:5000/users', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+            reset();
+        })
     }
     return (
         <div className='py-10 w-11/12 mx-auto'>
@@ -90,7 +101,7 @@ const Signup = () => {
                                 </select>
                             </div>
                             <div className="form-control w-full">
-                                <label className="label"> <span className="label-text">Name</span></label>
+                                <label className="label"> <span className="label-text">Photo</span></label>
                                 <input type="file" {...register("image")} className="input input-bordered w-full" />
                                 {errors.name && <p className='text-primary'>{errors.name.message}</p>}
                             </div>
