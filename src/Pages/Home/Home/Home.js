@@ -1,5 +1,5 @@
 import React from 'react';
-import AdvertizeItem from '../AdvertizeItem/AdvertizeItem';
+import AdvertizeItems from '../AdvertizeItem/AdvertizeItems';
 import Banner from '../Banner/Banner';
 import Categories from '../Categories/Categories';
 import EmailSubscribe from '../EmailSubscribe/EmailSubscribe';
@@ -9,7 +9,7 @@ const Home = () => {
         <div>
             <Banner></Banner>
             <Categories></Categories>
-            <AdvertizeItem></AdvertizeItem>
+            <AdvertizeItems></AdvertizeItems>
             <EmailSubscribe></EmailSubscribe>
         </div>
     );

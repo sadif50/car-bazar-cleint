@@ -15,7 +15,7 @@ const Categories = () => {
     return (
         <div className='w-11/12 mx-auto py-20'>
             <div className='text-center mb-8'>
-                <h2 className='text-4xl uppercase font-semibold'>Category</h2>
+                <h2 className='text-2xl md:text-4xl uppercase font-semibold'>Category</h2>
                 <p className='text-base'>
                     Find Your Cars By Barnd Name
                 </p>
