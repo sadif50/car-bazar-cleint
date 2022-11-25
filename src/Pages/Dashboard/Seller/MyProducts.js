@@ -2,7 +2,7 @@ import React from 'react';
 
 const MyProducts = () => {
     return (
-        <div className='border rounded'>
+        <div className='border rounded shadow-lg'>
             <div className='p-4 text-xl bg-slate-200'>
                 My Products
             </div>
