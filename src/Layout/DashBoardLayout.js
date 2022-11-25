@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 import Navbar from '../Pages/Shared/Navbar/Navbar';
 
 const DashBoardLayout = () => {
@@ -11,16 +11,15 @@ const DashBoardLayout = () => {
                 <div className="drawer-content">
                     <Outlet></Outlet>
                 </div>
-                <div className="drawer-side">
+                <div className="drawer-side bg-base-300">
                     <label htmlFor="dashboard-drawer" className="drawer-overlay"></label>
                     <ul className="menu p-4 w-80 text-base-content">
-                        <li><Link to="/dashboard/myorders">My Orders</Link></li>
-
-                        <li><Link to="/dashboard/addProduct">Add a Product</Link></li>
-                        <li><Link to="/dashboard/myProducts">My Products</Link></li>
-                        <li><Link to="/dashboard/myBuyers">My Buyers</Link></li>
-                        <li><Link to="/dashboard/allSellers">All Sellers</Link></li>
-                        <li><Link to="/dashboard/allBuyers">All Buyers</Link></li>
+                        <li className='border-b border-cyan-300-300'><NavLink to="/dashboard/myorders">My Orders</NavLink></li>
+                        <li className='border-b border-cyan-300-300'><NavLink to="/dashboard/addProduct">Add a Product</NavLink></li>
+                        <li className='border-b border-cyan-300-300'><NavLink to="/dashboard/myProducts">My Products</NavLink></li>
+                        <li className='border-b border-cyan-300-300'><NavLink to="/dashboard/myBuyers">My Buyers</NavLink></li>
+                        <li className='border-b border-cyan-300-300'><NavLink to="/dashboard/allSellers">All Sellers</NavLink></li>
+                        <li className='border-b border-cyan-300-300'><NavLink to="/dashboard/allBuyers">All Buyers</NavLink></li>
                     </ul>
 
                 </div>

@@ -1,0 +1,15 @@
+.heroBanner {
+    background-image: url(../../../assets/banner/bg.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 425px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@media screen and (max-width: 576px) {
+    .heroBanner{
+        height: 320px;
+    }
+}
