@@ -22,7 +22,7 @@ const Navbar = () => {
     </>;
     const location = useLocation();
     return (
-        <div className='bg-base-200'>
+        <div className='bg-slate-100'>
             <div className="navbar w-11/12 mx-auto">
                 <div className="navbar-start">
                     <div className="dropdown">
