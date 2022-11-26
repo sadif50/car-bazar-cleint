@@ -26,7 +26,7 @@ const Navbar = () => {
                 <Link className='rounded font-semibold' to='/login'>Login</Link>
             </li>
             <li className='rounded lg:ml-4'>
-                <Link className='rounded font-semibold' to='signup'>Sign Up</Link>
+                <Link className='rounded font-semibold' to='/signup'>Sign Up</Link>
             </li>
             </>
         }

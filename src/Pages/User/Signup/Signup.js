@@ -27,7 +27,8 @@ const Signup = () => {
                         name: data.name,
                         email: data.email,
                         role: data.role,
-                        image: imgData.data.url
+                        image: imgData.data.url,
+                        verified: false
                     }
                     createUserWithEmail(data.email, data.password)
                     .then(res => {

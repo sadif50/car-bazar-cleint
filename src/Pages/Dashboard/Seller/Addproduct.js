@@ -1,11 +1,94 @@
-import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { format } from 'date-fns';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { AuthContext } from '../../../contexts/AuthProvider';
 
 const Addproduct = () => {
+    const {user} = useContext(AuthContext);
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
+    const imageHostKey = process.env.REACT_APP_imgbb_key;
+
+    const navigate = useNavigate();
+
+    const { data: categories = [] } = useQuery({
+        queryKey: ['categories'],
+        queryFn: async () => {
+            const res = await fetch('http://localhost:5000/categories');
+            const data = await res.json();
+            return data;
+        }
+    });
+
+    const { data: userData = [], isLoading } = useQuery({
+        queryKey: [`user?email=${user?.email}`],
+        queryFn: async () => {
+            const res = await fetch(`http://localhost:5000/user?email=${user?.email}`);
+            const data = await res.json();
+            return data;
+        }
+    });
+
     const addProduct = data => {
-        console.log(data);
+        if((userData?.role === 'seller') && !isLoading){
+            const image = data.product_photo[0];
+            const formData = new FormData();
+            formData.append('image', image);
+            const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(imgData => {
+                if(imgData.success){
+                    const productData = {
+                        name: data.name,
+                        resale_price: data.resale_price,
+                        original_price: data.original_price,
+                        category: data.category,
+                        description: data.description,
+                        location: data.location,
+                        mobile_number: data.mobile_number,
+                        product_condition: data.product_condition,
+                        product_photo: imgData.data.url,
+                        purchase_year: data.purchase_year,
+                        used_year: data.used_year,
+                        seller_id: userData?._id,
+                        seller_name: userData?.name,
+                        seller_email: userData?.email,
+                        seller_photo: userData?.image,
+                        verified: (userData?.verified) ? true : false,
+                        date_posted: format(new Date(), 'PP')
+                    }
+                    saveProduct(productData);
+                    reset();
+                }
+            })
+        }
+        else {
+            toast.error('Add Product Only For Seller Account');
+            reset();
+        }
+    }
+    const saveProduct = productData => {
+        fetch('http://localhost:5000/addProduct', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(productData)
+        })
+        .then(res => res.json())
+        .then(data =>{
+            if(data.acknowledged){
+                toast.success('Product Added SuccessFully.');
+                navigate('/dashboard/myProducts');
+            }
+        })
     }
     return (
         <div className='border rounded shadow-lg'>
@@ -47,13 +130,28 @@ const Addproduct = () => {
                         </div>
                         <div className="form-control w-full">
                             <label className="label"> <span className="label-text">Product Category</span></label>
-                            <input type="text" {...register("category", { required: "Category is required." })} className="input input-bordered w-full" />
+                            <select type="text" {...register("category", { required: "Category is required." })} className="input input-bordered w-full">
+                                <option disabled selected>Select Category</option>
+                                {
+                                    categories.map(category => <option value={category.name} key={category._id}>{category.name}</option>)
+                                }
+                            </select>
                             {errors.category && <p className='text-primary'>{errors.category.message}</p>}
                         </div>
                         <div className="form-control w-full">
                             <label className="label"> <span className="label-text">Purchase Year</span></label>
                             <input type="text" {...register("purchase_year", { required: "Purchase Year is required." })} className="input input-bordered w-full" />
                             {errors.purchase_year && <p className='text-primary'>{errors.purchase_year.message}</p>}
+                        </div>
+                        <div className="form-control w-full">
+                            <label className="label"> <span className="label-text">Years of use</span></label>
+                            <input type="text" {...register("used_year", { required: "Purchase Year is required." })} className="input input-bordered w-full" />
+                            {errors.used_year && <p className='text-primary'>{errors.used_year.message}</p>}
+                        </div>
+                        <div className="form-control w-full">
+                            <label className="label"> <span className="label-text">Product Photo</span></label>
+                            <input type="file" {...register("product_photo", { required: "Purchase Year is required." })} className="input input-bordered w-full" />
+                            {errors.product_photo && <p className='text-primary'>{errors.product_photo.message}</p>}
                         </div>
                     </div>
                     <div className="form-control w-full">
