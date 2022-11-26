@@ -1,7 +1,7 @@
 import { GoogleAuthProvider } from 'firebase/auth';
 import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import logImg from '../../../assets/user/login.webp';
 import { AuthContext } from '../../../contexts/AuthProvider';
@@ -9,6 +9,11 @@ import { AuthContext } from '../../../contexts/AuthProvider';
 const Login = () => {
     const {register, handleSubmit, reset, formState: { errors }} = useForm();
     const { logInWithEmail, googleProviderLogIn } = useContext(AuthContext);
+
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const from = location.state?.from?.pathname || '/';
 
     const googleProvider = new GoogleAuthProvider();
 
@@ -18,6 +23,7 @@ const Login = () => {
         .then(result => {
             reset();
             toast.success('Login Successful.');
+            navigate(from, { replace: true });
         })
         .catch(err => {
             toast.error(err.message);
@@ -28,7 +34,8 @@ const Login = () => {
         googleProviderLogIn(googleProvider)
         .then(result => {
             console.log(result.user);
-            toast.success('Google Login Successful')
+            toast.success('Google Login Successful');
+            navigate(from, { replace: true });
         })
         .catch(err => {
             toast.error(err.message);

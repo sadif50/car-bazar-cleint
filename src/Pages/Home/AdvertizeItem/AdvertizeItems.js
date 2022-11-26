@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useState } from 'react';
+import BookingModal from '../../Shared/BookingModal/BookingModal';
 import Product from '../../Shared/Product/Product';
 
 const AdvertizeItems = () => {
+    const [selectProduct, setSelectProduct] = useState(null);
     const { data: products = [] } = useQuery({
         queryKey: ['products'],
         queryFn: async () => {
@@ -23,10 +25,17 @@ const AdvertizeItems = () => {
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                     {
-                        products.map(product => <Product key={product._id} product={product}></Product>)
+                        products.map(product => <Product 
+                            key={product._id} 
+                            product={product}
+                            setSelectProduct={setSelectProduct}
+                            ></Product>)
                     }
                 </div>
             </div>
+            <BookingModal
+                selectProduct={selectProduct}
+            ></BookingModal>
         </div>
     );
 };

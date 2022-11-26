@@ -2,8 +2,7 @@ import React from 'react';
 import './Product.css';
 import verify from '../../../assets/verified.png';
 
-const Product = ({ product }) => {
-    console.log(product);
+const Product = ({ product, setSelectProduct }) => {
     const { name, product_photo, resale_price, location, original_price, used_year, seller_name, date_posted, verified } = product;
     return (
         <div className='bg-white shadow p-4 rounded border'>
@@ -27,11 +26,15 @@ const Product = ({ product }) => {
                         <p><strong>Resale Price:</strong> <span className='text-primary text-2xl'>${resale_price}</span></p>
                         <p>Original Price: <span>${original_price}</span></p>
                     </div>
-                    <div className='md:flex justify-between'>
+                    <div className='md:flex justify-between mb-5'>
                         <p>Used: {used_year} years</p>
                         <p>Post Date: {date_posted}</p>
                     </div>
-                    <button className='btn btn-primary text-white w-full mt-3'>Book Now</button>
+                    <label
+                        htmlFor="booking-modal"
+                        className="btn btn-primary text-white w-full"
+                        onClick={()=>setSelectProduct(product)}
+                    >Book Now</label>
                 </div>
 
             </div>

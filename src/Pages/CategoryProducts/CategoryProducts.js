@@ -1,10 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useState } from 'react';
 import { useLoaderData } from 'react-router-dom';
+import BookingModal from '../Shared/BookingModal/BookingModal';
 import Loader from '../Shared/Loader/Loader';
 import Product from '../Shared/Product/Product';
 
 const CategoryProducts = () => {
+    const [selectProduct, setSelectProduct] = useState(null);
     const category = useLoaderData();
     console.log(category);
 
@@ -33,9 +35,16 @@ const CategoryProducts = () => {
             <hr />
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8'>
                 {
-                    products.map(product => <Product key={product._id} product={product}></Product>)
+                    products.map(product => <Product 
+                        key={product._id} 
+                        product={product}
+                        setSelectProduct={setSelectProduct}
+                        ></Product>)
                 }
             </div>
+            <BookingModal
+                selectProduct={selectProduct}
+            ></BookingModal>
         </div>
     );
 };
