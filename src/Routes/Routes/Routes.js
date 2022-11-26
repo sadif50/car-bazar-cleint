@@ -9,6 +9,7 @@ import Addproduct from "../../Pages/Dashboard/Seller/Addproduct";
 import MyBuyers from "../../Pages/Dashboard/Seller/MyBuyers";
 import MyProducts from "../../Pages/Dashboard/Seller/MyProducts";
 import Home from "../../Pages/Home/Home/Home";
+import FourOFour from "../../Pages/Shared/FourOFour/FourOFour";
 import Login from "../../Pages/User/Login/Login";
 import Signup from "../../Pages/User/Signup/Signup";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
                 element: <AllBuyers></AllBuyers>
             }
         ]
+    },
+    {
+        path: '/*',
+        element: <FourOFour></FourOFour>
     }
 ]);
 
