@@ -1,11 +1,31 @@
+import { format } from 'date-fns';
 import React, { useContext } from 'react';
+import { useForm } from 'react-hook-form';
 import { AuthContext } from '../../../contexts/AuthProvider';
+import axios from 'axios';
 
 const BookingModal = ({ selectProduct }) => {
     const { user } = useContext(AuthContext);
-    const handleBooking = e => {
-        e.preventDefault();
-
+    const {register, handleSubmit, reset} = useForm();
+    const handleBooking = data => {
+        axios.post('http://localhost:5000/booking', {
+            buyer: user?.displayName,
+            email: user?.email,
+            meeting_location: data?.meeting_location,
+            phone: data?.phone,
+            price: selectProduct?.resale_price,
+            product_name: selectProduct?.name,
+            booked_at: format(new Date(), 'PP'),
+            seller: selectProduct?.seller_name,
+            seller_email: selectProduct?.seller_email
+        })
+        .then(function(response){
+            console.log(response);
+            reset();
+        })
+        .catch(function(error){
+            console.log(error);
+        })
     }
     return (
         <>
@@ -13,7 +33,7 @@ const BookingModal = ({ selectProduct }) => {
             <div className="modal">
                 <div className="modal-box relative">
                     <label htmlFor="booking-modal" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-                    <form onSubmit={handleBooking} className='grid grid-cols-1 gap-3 mt-10'>
+                    <form onSubmit={handleSubmit(handleBooking)} className='grid grid-cols-1 gap-3 mt-10'>
                         <div className='flex items-center'>
                             <label htmlFor="" className='w-1/4'>Name</label>
                             <input name="name" type="text" defaultValue={user?.displayName} disabled className="input w-full input-bordered" />
@@ -36,12 +56,12 @@ const BookingModal = ({ selectProduct }) => {
 
                         <div className='flex items-center'>
                             <label htmlFor="" className='w-1/4'>Mobile</label>
-                            <input name="phone" type="text" placeholder="Phone Number" className="input w-full input-bordered" />
+                            <input {...register('phone')} type="text" placeholder="Phone Number" className="input w-full input-bordered" />
                         </div>
 
                         <div className='flex items-center'>
                             <label htmlFor="" className='w-1/4'>Location</label>
-                            <input name="phone" type="text" placeholder="Meeting Location" className="input w-full input-bordered" />
+                            <input {...register('meeting_location')} type="text" placeholder="Meeting Location" className="input w-full input-bordered" />
                         </div>
                         <br />
                         <input className='btn btn-primary text-white w-full' type="submit" value="Submit" />
