@@ -7,8 +7,6 @@ const BookingModal = ({ selectProduct }) => {
         e.preventDefault();
 
     }
-    console.log('slectProduct', selectProduct);
-
     return (
         <>
             <input type="checkbox" id="booking-modal" className="modal-toggle" />

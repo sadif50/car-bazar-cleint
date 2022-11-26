@@ -11,7 +11,7 @@ const CategoryProducts = () => {
     console.log(category);
 
     const { data: products = [], isLoading } = useQuery({
-        queryKey: [`category?category_name=${category?.name}`],
+        queryKey: [`category`],
         queryFn: async () => {
             const res = await fetch(`http://localhost:5000/category?category_name=${category?.name}`);
             const data = await res.json();

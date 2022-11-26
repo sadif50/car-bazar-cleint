@@ -2,9 +2,19 @@ import React, { useContext } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { FaCar } from 'react-icons/fa';
 import { AuthContext } from '../../../contexts/AuthProvider';
+import { useQuery } from '@tanstack/react-query';
 
 const Navbar = () => {
-    const {user, logOut} = useContext(AuthContext);
+    const { user, logOut } = useContext(AuthContext);
+
+    const { data: userData = [] } = useQuery({
+        queryKey: [`user`],
+        queryFn: async () => {
+            const res = await fetch(`http://localhost:5000/user?email=${user?.email}`);
+            const data = await res.json();
+            return data;
+        }
+    });
 
     const menuItem = <>
         <li className='rounded lg:ml-4'>
@@ -15,19 +25,31 @@ const Navbar = () => {
         </li>
         {
             user?.uid ? <>
-                <li className='rounded lg:ml-4'>
-                    <NavLink className='rounded font-semibold' to='/dashboard'>Dashboard</NavLink>
-                </li>
-                <li className='rounded lg:ml-4' onClick={()=>logOut()}>
+                {
+                    (userData.role === 'buyer') && <li className='rounded lg:ml-4'>
+                        <NavLink className='rounded font-semibold' to='/dashboard/myorders'>Dashboard</NavLink>
+                    </li>
+                }
+                {
+                    (userData.role === 'seller') && <li className='rounded lg:ml-4'>
+                        <NavLink className='rounded font-semibold' to='/dashboard/addProduct'>Dashboard</NavLink>
+                    </li>
+                }
+                {
+                    (userData.role === 'admin') && <li className='rounded lg:ml-4'>
+                        <NavLink className='rounded font-semibold' to='/dashboard/allSellers'>Dashboard</NavLink>
+                    </li>
+                }
+                <li className='rounded lg:ml-4' onClick={() => logOut()}>
                     <Link className='rounded font-semibold'>Sign Out</Link>
                 </li>
             </> : <>
-            <li className='rounded lg:ml-4'>
-                <Link className='rounded font-semibold' to='/login'>Login</Link>
-            </li>
-            <li className='rounded lg:ml-4'>
-                <Link className='rounded font-semibold' to='/signup'>Sign Up</Link>
-            </li>
+                <li className='rounded lg:ml-4'>
+                    <Link className='rounded font-semibold' to='/login'>Login</Link>
+                </li>
+                <li className='rounded lg:ml-4'>
+                    <Link className='rounded font-semibold' to='/signup'>Sign Up</Link>
+                </li>
             </>
         }
     </>;

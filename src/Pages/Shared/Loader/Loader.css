@@ -19,7 +19,7 @@
     transform: rotate(225deg);
     animation-iteration-count: infinite;
     animation-name: orbit;
-    animation-duration: 5s;
+    animation-duration: 2s;
   }
   .loader .circle:after {
     content: '';

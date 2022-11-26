@@ -4,13 +4,13 @@ import './Loader.css';
 const Loader = () => {
     return (
         <div className='loader-bg'>
-            <div class='loader'>
-                <div class="bg"></div>
-                <div class='circle'></div>
-                <div class='circle'></div>
-                <div class='circle'></div>
-                <div class='circle'></div>
-                <div class='circle'></div>
+            <div className='loader'>
+                <div className="bg"></div>
+                <div className='circle'></div>
+                <div className='circle'></div>
+                <div className='circle'></div>
+                <div className='circle'></div>
+                <div className='circle'></div>
             </div>
         </div>
     );

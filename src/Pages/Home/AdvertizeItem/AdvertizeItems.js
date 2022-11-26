@@ -13,7 +13,6 @@ const AdvertizeItems = () => {
             return data;
         }
     });
-    console.log(products);
     return (
         <div className='bg-slate-100 py-20'>
             <div className='w-11/12 mx-auto'>
