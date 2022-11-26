@@ -12,7 +12,7 @@ const EmailSubscribe = () => {
             <div className='flex justify-center'>
                 <div className='w-full md:w-9/12 lg:w-1/2 sm:flex flex-wrap sm:flex-nowrap text-center'>
                     <input type="text" placeholder="Type here" className="input input-bordered w-full mb-3 sm:mb-0" />
-                    <button className='btn btn-primary'>Get News</button>
+                    <button className='btn btn-primary text-white'>Get News</button>
                 </div>
             </div>
         </div>

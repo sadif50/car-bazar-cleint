@@ -9,13 +9,15 @@ const MyProducts = () => {
             <div className='p-4 overflow-x-auto'>
                 <table className='table w-full'>
                     <thead>
-                        <th>SL</th>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Category</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                        <th>Advertise</th>
+                        <tr>
+                            <th>SL</th>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                            <th>Advertise</th>
+                        </tr>
                     </thead>
                     <tbody>
                         <tr>

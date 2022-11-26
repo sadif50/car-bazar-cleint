@@ -11,7 +11,6 @@ const Categories = () => {
             return data;
         }
     });
-    console.log(categories)
     return (
         <div className='w-11/12 mx-auto py-20'>
             <div className='text-center mb-8'>

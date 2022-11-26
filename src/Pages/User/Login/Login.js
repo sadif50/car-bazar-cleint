@@ -58,7 +58,7 @@ const Login = () => {
                                 })} className="input input-bordered w-full" />
                                 {errors.password && <p className='text-primary'>{errors.password.message}</p>}
                             </div>
-                            <input className='btn btn-primary mt-4 w-full' value="Login" type="submit" />
+                            <input className='btn btn-primary text-white mt-4 w-full' value="Login" type="submit" />
                         </form>
                         <p className='mt-5'>New to CarBazar? <Link className='text-secondary' to="/signup">Sign Up</Link></p>
                         <div className="divider">OR</div>

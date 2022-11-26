@@ -1,9 +1,10 @@
 import React from 'react';
+import Loader from '../../Shared/Loader/Loader';
 
 const Myorder = () => {
     return (
         <div>
-            My Order
+            <Loader></Loader>
         </div>
     );
 };

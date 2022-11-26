@@ -1,13 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../../../contexts/AuthProvider';
+import Loader from '../../Shared/Loader/Loader';
 
 const Addproduct = () => {
     const {user} = useContext(AuthContext);
+    const [loader, setLoader] = useState(false);
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
     const imageHostKey = process.env.REACT_APP_imgbb_key;
@@ -34,6 +36,7 @@ const Addproduct = () => {
 
     const addProduct = data => {
         if((userData?.role === 'seller') && !isLoading){
+            setLoader(true);
             const image = data.product_photo[0];
             const formData = new FormData();
             formData.append('image', image);
@@ -86,9 +89,13 @@ const Addproduct = () => {
         .then(data =>{
             if(data.acknowledged){
                 toast.success('Product Added SuccessFully.');
+                setLoader(false);
                 navigate('/dashboard/myProducts');
             }
         })
+    }
+    if(loader){
+        return <Loader></Loader>
     }
     return (
         <div className='border rounded shadow-lg'>
@@ -115,7 +122,12 @@ const Addproduct = () => {
                         </div>
                         <div className="form-control w-full">
                             <label className="label"> <span className="label-text">Product Condition</span></label>
-                            <input type="text" {...register("product_condition", { required: "Product condition is required." })} className="input input-bordered w-full" />
+                            <select {...register("product_condition", { required: "Product condition is required." })} className="input input-bordered w-full">
+                                <option value="" selected disabled>Select Condition</option>
+                                <option value="excelent">Excelent</option>
+                                <option value="good">Good</option>
+                                <option value="fair">Fair</option>
+                            </select>
                             {errors.product_condition && <p className='text-primary'>{errors.product_condition.message}</p>}
                         </div>
                         <div className="form-control w-full">
@@ -162,7 +174,7 @@ const Addproduct = () => {
                         {errors.description && <p className='text-primary'>{errors.description.message}</p>}
                     </div>
                     <div className='flex justify-end'>
-                        <input className='btn btn-primary mt-4' value="Add Product" type="submit" />
+                        <input className='btn btn-primary text-white mt-4' value="Add Product" type="submit" />
                     </div>
                 </form>
             </div>

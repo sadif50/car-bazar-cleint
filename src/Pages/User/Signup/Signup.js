@@ -106,7 +106,7 @@ const Signup = () => {
                                 <input type="file" {...register("image")} className="input input-bordered w-full" />
                                 {errors.name && <p className='text-primary'>{errors.name.message}</p>}
                             </div>
-                            <input className='btn btn-primary mt-4 w-full' value="Create Account" type="submit" />
+                            <input className='btn btn-primary text-white mt-4 w-full' value="Create Account" type="submit" />
                         </form>
                         <p className='mt-5'>Already have an account? <Link className='text-secondary' to="/login">Login</Link></p>
                     </div>
