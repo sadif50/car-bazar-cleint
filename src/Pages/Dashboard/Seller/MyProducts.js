@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useContext } from 'react';
+import { toast } from 'react-toastify';
 import { AuthContext } from '../../../contexts/AuthProvider';
 import Loader from '../../Shared/Loader/Loader';
 
 const MyProducts = () => {
     const { user } = useContext(AuthContext);
-    const { data: products = [], isLoading } = useQuery({
+    const { data: products = [], isLoading, refetch } = useQuery({
         queryKey: [`product`],
         queryFn: async () => {
             const res = await fetch(`http://localhost:5000/products?seller_email=${user?.email}`);
@@ -13,6 +14,24 @@ const MyProducts = () => {
             return data;
         }
     });
+
+    const deleteProduct = id => {
+        const agree = window.confirm('Are you sure to delete this product?');
+        if(agree){
+            fetch(`http://localhost:5000/product/${id}`, {
+                method: 'DELETE'
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.deletedCount > 0) {
+                    toast.success('Product Deleted Successfully.');
+                    refetch();
+                }
+            })
+            .catch(err => console.log(err));
+        }
+    }
+
     if (isLoading) {
         return <Loader></Loader>
     }
@@ -43,7 +62,7 @@ const MyProducts = () => {
                                 <td>{product.category}</td>
                                 <td>{product?.status}</td>
                                 <td>
-                                    <button className='btn-sm btn-error rounded'>Delete</button>
+                                    <button onClick={()=>deleteProduct(product._id)} className='btn-sm btn-error rounded'>Delete {product._id}</button>
                                 </td>
                                 <td><button className='btn-sm btn-secondary rounded'>Advertise</button></td>
                             </tr>)
