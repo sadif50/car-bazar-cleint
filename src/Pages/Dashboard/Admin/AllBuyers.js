@@ -11,7 +11,6 @@ const AllBuyers = () => {
             return data;
         }
     });
-    console.log(buyers)
     if (isLoading) {
         return <Loader></Loader>
     }

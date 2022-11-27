@@ -1,19 +1,36 @@
+import { useQuery } from '@tanstack/react-query';
 import { GoogleAuthProvider } from 'firebase/auth';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import logImg from '../../../assets/user/login.webp';
 import { AuthContext } from '../../../contexts/AuthProvider';
+import useToken from '../../../Hooks/useToken';
 
 const Login = () => {
     const {register, handleSubmit, reset, formState: { errors }} = useForm();
     const { logInWithEmail, googleProviderLogIn } = useContext(AuthContext);
+    const [userEmail, setUserEmail] = useState('');
+    const [token] = useToken(userEmail);
+
+    const { data: buyers = [] } = useQuery({
+        queryKey: ['users'],
+        queryFn: async () => {
+            const res = await fetch('http://localhost:5000/users?role=buyer');
+            const data = await res.json();
+            return data;
+        }
+    });
 
     const location = useLocation();
     const navigate = useNavigate();
 
     const from = location.state?.from?.pathname || '/';
+
+    if(token){
+        navigate(from, { replace: true });
+    }
 
     const googleProvider = new GoogleAuthProvider();
 
@@ -21,9 +38,10 @@ const Login = () => {
         console.log(data);
         logInWithEmail(data.email, data.password)
         .then(result => {
+            const user = result.user;
+            setUserEmail(user.email);
             reset();
             toast.success('Login Successful.');
-            navigate(from, { replace: true });
         })
         .catch(err => {
             toast.error(err.message);
@@ -33,12 +51,40 @@ const Login = () => {
     const logInWithGoogle = () => {
         googleProviderLogIn(googleProvider)
         .then(result => {
-            console.log(result.user);
-            toast.success('Google Login Successful');
-            navigate(from, { replace: true });
+            const user = result.user;
+            const alreadyUser = buyers.find(buyer => buyer.email === user.email);
+            if(!alreadyUser){
+                const userData = {
+                    name: user?.displayName,
+                    email: user.email,
+                    role: 'buyer',
+                    image: user?.photoURL,
+                    verified: false,
+                    uid: user?.uid
+                }
+                saveUser(userData);
+            }
+            else{
+                setUserEmail(user.email);
+                toast.success('Google Login Successful');
+            }
         })
         .catch(err => {
             toast.error(err.message);
+        })
+    }
+    const saveUser = userData => {
+        fetch('http://localhost:5000/users', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        })
+        .then(res => res.json())
+        .then(data => {
+            setUserEmail(userData.email);
+            toast.success('Google Login Successful');
         })
     }
     return (

@@ -32,6 +32,26 @@ const MyProducts = () => {
         }
     }
 
+    const advertiseProduct = id => {
+        const updatedData = {
+            advertise: true
+        }
+        fetch(`http://localhost:5000/product/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(updatedData)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.modifiedCount > 0){
+                toast.success('Product Advertised SuccessFully.');
+                refetch();
+            }
+        })
+    }
+
     if (isLoading) {
         return <Loader></Loader>
     }
@@ -60,11 +80,29 @@ const MyProducts = () => {
                                 <td>{product.name}</td>
                                 <td>${product.resale_price}</td>
                                 <td>{product.category}</td>
-                                <td>{product?.status}</td>
                                 <td>
-                                    <button onClick={()=>deleteProduct(product._id)} className='btn-sm btn-error rounded'>Delete {product._id}</button>
+                                    {(product?.sold) ? 'Sold' : 'Available'}
                                 </td>
-                                <td><button className='btn-sm btn-secondary rounded'>Advertise</button></td>
+                                <td>
+                                    <button onClick={()=>deleteProduct(product._id)} className='btn-sm btn-error rounded'>Delete</button>
+                                </td>
+                                <td>
+                                    {
+                                        (product?.advertise) 
+                                        ? <>
+                                            {
+                                                (product?.sold) ? <strong>Product Sold</strong> : <button className='btn-sm btn-success rounded text-white' disabled>Product Advertised</button> 
+                                            }
+                                        </>
+                                        
+                                        : <>
+                                            {
+                                                (product?.sold) ? <strong>Product Sold</strong> : <button onClick={()=>advertiseProduct(product._id)} className='btn-sm btn-info rounded'>Advertise</button>
+                                            }
+                                        </>
+                                    }
+                                    
+                                </td>
                             </tr>)
                         }
                     </tbody>

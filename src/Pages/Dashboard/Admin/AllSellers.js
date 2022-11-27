@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
 import Loader from '../../Shared/Loader/Loader';
 
 const AllSellers = () => {
+    
     const { data: sellers = [], isLoading } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {

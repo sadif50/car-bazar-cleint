@@ -14,6 +14,9 @@ const AdvertizeItems = () => {
             return data;
         }
     });
+    if(products.length < 1){
+        return <hr />;
+    }
     return (
         <div className='bg-slate-100 py-20'>
             <div className='w-11/12 mx-auto'>

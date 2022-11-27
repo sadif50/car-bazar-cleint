@@ -65,7 +65,9 @@ const Addproduct = () => {
                         seller_email: userData?.email,
                         seller_photo: userData?.image,
                         verified: (userData?.verified) ? true : false,
-                        date_posted: format(new Date(), 'PP')
+                        date_posted: format(new Date(), 'PP'),
+                        advertise: false,
+                        sold: false
                     }
                     saveProduct(productData);
                     reset();

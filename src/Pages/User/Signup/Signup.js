@@ -1,15 +1,23 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../contexts/AuthProvider';
 import signImg from '../../../assets/user/signup.png';
 import { toast } from 'react-toastify';
+import useToken from '../../../Hooks/useToken';
 
 const Signup = () => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const { createUserWithEmail, updateInfo } = useContext(AuthContext);
+    const [userEmail, setUserEmail] = useState('');
+    const [token] = useToken(userEmail);
+    const navigate = useNavigate();
 
     const imageAPIkey = process.env.REACT_APP_imgbb_key;
+
+    if(token){
+        navigate('/');
+    }
 
     const handleSignUp = (data) => {
         const image = data.image[0];
@@ -23,21 +31,22 @@ const Signup = () => {
             .then(res => res.json())
             .then(imgData => {
                 if (imgData.success) {
-                    const userData = {
-                        name: data.name,
-                        email: data.email,
-                        role: data.role,
-                        image: imgData.data.url,
-                        verified: false
-                    }
                     createUserWithEmail(data.email, data.password)
                     .then(res => {
                         const user = res.user;
                         console.log(user);
+                        const uid = user.uid;
                         toast.success('Sign Up Successful.');
-
-                        updateInfo(data.name, userData.image)
+                        updateInfo(data.name, imgData.data.url)
                         .then(() => {
+                            const userData = {
+                                name: data.name,
+                                email: data.email,
+                                role: data.role,
+                                image: imgData.data.url,
+                                verified: false,
+                                uid: uid
+                            }
                             saveUser(userData);
                         })
                         .catch(err => console.log(err));
@@ -61,7 +70,7 @@ const Signup = () => {
         })
         .then(res => res.json())
         .then(data => {
-            console.log(data);
+            setUserEmail(userData.email);
             reset();
         })
     }
@@ -103,8 +112,8 @@ const Signup = () => {
                             </div>
                             <div className="form-control w-full">
                                 <label className="label"> <span className="label-text">Photo</span></label>
-                                <input type="file" {...register("image")} className="input input-bordered w-full" />
-                                {errors.name && <p className='text-primary'>{errors.name.message}</p>}
+                                <input type="file" {...register("image", { required: "Profile Photo is required." })} className="input input-bordered w-full" />
+                                {errors.image && <p className='text-primary'>{errors.image.message}</p>}
                             </div>
                             <input className='btn btn-primary text-white mt-4 w-full' value="Create Account" type="submit" />
                         </form>
