@@ -3,8 +3,9 @@ import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { AuthContext } from '../../../contexts/AuthProvider';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
-const BookingModal = ({ selectProduct }) => {
+const BookingModal = ({ selectProduct, setModal }) => {
     const { user } = useContext(AuthContext);
     const {register, handleSubmit, reset} = useForm();
     const handleBooking = data => {
@@ -21,7 +22,11 @@ const BookingModal = ({ selectProduct }) => {
         })
         .then(function(response){
             console.log(response);
-            reset();
+            if(response.data.acknowledged){
+                setModal(false);
+                toast.success('Your Car Booked Successfully!')
+                reset();
+            }
         })
         .catch(function(error){
             console.log(error);

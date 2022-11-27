@@ -7,6 +7,7 @@ import Product from '../Shared/Product/Product';
 
 const CategoryProducts = () => {
     const [selectProduct, setSelectProduct] = useState(null);
+    const [modal, setModal] = useState(false);
     const category = useLoaderData();
     console.log(category);
 
@@ -39,12 +40,16 @@ const CategoryProducts = () => {
                         key={product._id} 
                         product={product}
                         setSelectProduct={setSelectProduct}
+                        setModal={setModal}
                         ></Product>)
                 }
             </div>
-            <BookingModal
+            {
+                modal && <BookingModal
                 selectProduct={selectProduct}
+                setModal={setModal}
             ></BookingModal>
+            }
         </div>
     );
 };

@@ -6,13 +6,15 @@ import AllBuyers from "../../Pages/Dashboard/Admin/AllBuyers";
 import AllSellers from "../../Pages/Dashboard/Admin/AllSellers";
 import Myorder from "../../Pages/Dashboard/Buyer/Myorder";
 import Addproduct from "../../Pages/Dashboard/Seller/Addproduct";
-import MyBuyers from "../../Pages/Dashboard/Seller/MyBuyers";
 import MyProducts from "../../Pages/Dashboard/Seller/MyProducts";
 import Home from "../../Pages/Home/Home/Home";
 import FourOFour from "../../Pages/Shared/FourOFour/FourOFour";
 import Login from "../../Pages/User/Login/Login";
 import Signup from "../../Pages/User/Signup/Signup";
+import AdminRoute from "../AdminRoute/AdminRoute";
+import BuyerRoute from "../BuyerRoute/BuyerRoute";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
+import SellerRoute from "../SellerRoute/SellerRoute";
 
 const router = createBrowserRouter([
     {
@@ -44,27 +46,24 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '/dashboard/myorders',
-                element: <Myorder></Myorder>
+                element: <BuyerRoute><Myorder></Myorder></BuyerRoute>
             },
             {
                 path: '/dashboard/addProduct',
-                element: <Addproduct></Addproduct>
+                element: <SellerRoute><Addproduct></Addproduct></SellerRoute>
             },
             {
                 path: '/dashboard/myProducts',
-                element: <MyProducts></MyProducts>
-            },
-            {
-                path: '/dashboard/myBuyers',
-                element: <MyBuyers></MyBuyers>
+                element: <SellerRoute><MyProducts></MyProducts></SellerRoute>
             },
             {
                 path: '/dashboard/allSellers',
-                element: <AllSellers></AllSellers>
+                element: <AdminRoute><AllSellers></AllSellers></AdminRoute>
             },
             {
                 path: '/dashboard/allBuyers',
-                element: <AllBuyers></AllBuyers>
+                element: <AdminRoute><AllBuyers></AllBuyers></AdminRoute>
+                
             }
         ]
     },

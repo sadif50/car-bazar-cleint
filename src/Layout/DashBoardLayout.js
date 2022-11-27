@@ -1,23 +1,17 @@
-import { useQuery } from '@tanstack/react-query';
 import React, { useContext } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthProvider';
-import Loader from '../Pages/Shared/Loader/Loader';
+import useAdmin from '../Hooks/useAdmin';
+import useBuyer from '../Hooks/useBuyer';
+import useSeller from '../Hooks/useSeller';
 import Navbar from '../Pages/Shared/Navbar/Navbar';
 
 const DashBoardLayout = () => {
     const { user } = useContext(AuthContext);
-    const { data: userData = [], isLoading } = useQuery({
-        queryKey: [`user`],
-        queryFn: async () => {
-            const res = await fetch(`http://localhost:5000/user?email=${user?.email}`);
-            const data = await res.json();
-            return data;
-        }
-    });
-    if (isLoading) {
-        return <Loader></Loader>
-    }
+    const [isAdmin] = useAdmin(user?.email);
+    const [isSeller] = useSeller(user?.email);
+    const [isBuyer] = useBuyer(user?.email);
+
     return (
         <div>
             <Navbar></Navbar>
@@ -30,16 +24,16 @@ const DashBoardLayout = () => {
                     <label htmlFor="dashboard-drawer" className="drawer-overlay"></label>
                     <ul className="menu p-4 w-80 text-base-content">
                         {
-                            (userData.role === 'buyer') && <li className='border-b border-cyan-300-300'><NavLink to="/dashboard/myorders">My Orders</NavLink></li>
+                            isBuyer && <li className='border-b border-cyan-300-300'><NavLink to="/dashboard/myorders">My Orders</NavLink></li>
                         }
                         {
-                            (userData.role === 'seller') && <>
+                            isSeller && <>
                                 <li className='border-b border-cyan-300-300'><NavLink to="/dashboard/addProduct">Add a Product</NavLink></li>
                                 <li className='border-b border-cyan-300-300'><NavLink to="/dashboard/myProducts">My Products</NavLink></li>
                             </>
                         }
                         {
-                            (userData.role === 'admin') && <>
+                            isAdmin && <>
                                 <li className='border-b border-cyan-300-300'><NavLink to="/dashboard/allSellers">All Sellers</NavLink></li>
                                 <li className='border-b border-cyan-300-300'><NavLink to="/dashboard/allBuyers">All Buyers</NavLink></li>
                             </>

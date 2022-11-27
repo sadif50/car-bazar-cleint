@@ -2,19 +2,17 @@ import React, { useContext } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { FaCar } from 'react-icons/fa';
 import { AuthContext } from '../../../contexts/AuthProvider';
-import { useQuery } from '@tanstack/react-query';
+import useAdmin from '../../../Hooks/useAdmin';
+import useSeller from '../../../Hooks/useSeller';
+import useBuyer from '../../../Hooks/useBuyer';
 
 const Navbar = () => {
     const { user, logOut } = useContext(AuthContext);
-
-    const { data: userData = [] } = useQuery({
-        queryKey: [`user`],
-        queryFn: async () => {
-            const res = await fetch(`http://localhost:5000/user?email=${user?.email}`);
-            const data = await res.json();
-            return data;
-        }
-    });
+    
+    // Loading Users Role And Showing Dashboard Route based on it
+    const [isAdmin] = useAdmin(user?.email);
+    const [isSeller] = useSeller(user?.email);
+    const [isBuyer] = useBuyer(user?.email);
 
     const menuItem = <>
         <li className='rounded lg:ml-4'>
@@ -24,19 +22,19 @@ const Navbar = () => {
             <NavLink className='rounded font-semibold' to='/blog'>Blog</NavLink>
         </li>
         {
-            user?.uid ? <>
+            user ? <>
                 {
-                    (userData.role === 'buyer') && <li className='rounded lg:ml-4'>
+                    isBuyer && <li className='rounded lg:ml-4'>
                         <NavLink className='rounded font-semibold' to='/dashboard/myorders'>Dashboard</NavLink>
                     </li>
                 }
                 {
-                    (userData.role === 'seller') && <li className='rounded lg:ml-4'>
+                    isSeller && <li className='rounded lg:ml-4'>
                         <NavLink className='rounded font-semibold' to='/dashboard/addProduct'>Dashboard</NavLink>
                     </li>
                 }
                 {
-                    (userData.role === 'admin') && <li className='rounded lg:ml-4'>
+                    isAdmin && <li className='rounded lg:ml-4'>
                         <NavLink className='rounded font-semibold' to='/dashboard/allSellers'>Dashboard</NavLink>
                     </li>
                 }

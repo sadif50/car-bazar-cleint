@@ -2,7 +2,7 @@ import React from 'react';
 import './Product.css';
 import verify from '../../../assets/verified.png';
 
-const Product = ({ product, setSelectProduct }) => {
+const Product = ({ product, setSelectProduct, setModal }) => {
     const { name, product_photo, resale_price, location, original_price, used_year, seller_name, date_posted, verified } = product;
     return (
         <div className='bg-white shadow p-4 rounded border'>
@@ -33,7 +33,9 @@ const Product = ({ product, setSelectProduct }) => {
                     <label
                         htmlFor="booking-modal"
                         className="btn btn-primary text-white w-full"
-                        onClick={()=>setSelectProduct(product)}
+                        onClick={()=>{
+                            setModal(true);
+                            setSelectProduct(product)}}
                     >Book Now</label>
                 </div>
 

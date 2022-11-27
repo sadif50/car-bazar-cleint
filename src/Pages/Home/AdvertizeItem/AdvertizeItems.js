@@ -5,6 +5,7 @@ import Product from '../../Shared/Product/Product';
 
 const AdvertizeItems = () => {
     const [selectProduct, setSelectProduct] = useState(null);
+    const [modal, setModal] = useState(false);
     const { data: products = [] } = useQuery({
         queryKey: ['products'],
         queryFn: async () => {
@@ -28,13 +29,18 @@ const AdvertizeItems = () => {
                             key={product._id} 
                             product={product}
                             setSelectProduct={setSelectProduct}
+                            setModal={setModal}
                             ></Product>)
                     }
                 </div>
             </div>
-            <BookingModal
+            {
+               modal && <BookingModal
                 selectProduct={selectProduct}
+                setModal={setModal}
             ></BookingModal>
+            }
+            
         </div>
     );
 };
