@@ -52,7 +52,7 @@ const AuthProvider = ({children}) => {
     }, []);
 
     return(
-        <AuthContext.Provider value={{user, loading, createUserWithEmail, logInWithEmail, googleProviderLogIn, logOut, updateInfo }}>
+        <AuthContext.Provider value={{user, loading, setLoading, createUserWithEmail, logInWithEmail, googleProviderLogIn, logOut, updateInfo }}>
             {children}
         </AuthContext.Provider>
     );

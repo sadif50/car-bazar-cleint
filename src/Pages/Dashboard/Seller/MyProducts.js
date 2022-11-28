@@ -9,7 +9,7 @@ const MyProducts = () => {
     const { data: products = [], isLoading, refetch } = useQuery({
         queryKey: [`product`],
         queryFn: async () => {
-            const res = await fetch(`http://localhost:5000/products?seller_email=${user?.email}`);
+            const res = await fetch(`https://car-bazar-server.vercel.app/products?seller_email=${user?.email}`);
             const data = await res.json();
             return data;
         }
@@ -18,7 +18,7 @@ const MyProducts = () => {
     const deleteProduct = id => {
         const agree = window.confirm('Are you sure to delete this product?');
         if(agree){
-            fetch(`http://localhost:5000/product/${id}`, {
+            fetch(`https://car-bazar-server.vercel.app/product/${id}`, {
                 method: 'DELETE'
             })
             .then(res => res.json())
@@ -36,7 +36,7 @@ const MyProducts = () => {
         const updatedData = {
             advertise: true
         }
-        fetch(`http://localhost:5000/product/${id}`, {
+        fetch(`https://car-bazar-server.vercel.app/product/${id}`, {
             method: 'PATCH',
             headers: {
                 'content-type': 'application/json'

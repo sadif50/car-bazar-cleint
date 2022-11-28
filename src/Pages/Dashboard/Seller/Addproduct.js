@@ -19,7 +19,7 @@ const Addproduct = () => {
     const { data: categories = [] } = useQuery({
         queryKey: ['categories'],
         queryFn: async () => {
-            const res = await fetch('http://localhost:5000/categories');
+            const res = await fetch('https://car-bazar-server.vercel.app/categories');
             const data = await res.json();
             return data;
         }
@@ -28,7 +28,7 @@ const Addproduct = () => {
     const { data: userData = [], isLoading } = useQuery({
         queryKey: [`user`],
         queryFn: async () => {
-            const res = await fetch(`http://localhost:5000/user?email=${user?.email}`);
+            const res = await fetch(`https://car-bazar-server.vercel.app/user?email=${user?.email}`);
             const data = await res.json();
             return data;
         }
@@ -80,7 +80,7 @@ const Addproduct = () => {
         }
     }
     const saveProduct = productData => {
-        fetch('http://localhost:5000/addProduct', {
+        fetch('https://car-bazar-server.vercel.app/addProduct', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'

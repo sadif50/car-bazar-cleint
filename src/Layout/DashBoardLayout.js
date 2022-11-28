@@ -8,6 +8,8 @@ import Navbar from '../Pages/Shared/Navbar/Navbar';
 
 const DashBoardLayout = () => {
     const { user } = useContext(AuthContext);
+
+    // Load user role by using custom hooks
     const [isAdmin] = useAdmin(user?.email);
     const [isSeller] = useSeller(user?.email);
     const [isBuyer] = useBuyer(user?.email);

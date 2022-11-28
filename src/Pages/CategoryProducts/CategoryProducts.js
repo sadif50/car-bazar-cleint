@@ -9,18 +9,16 @@ const CategoryProducts = () => {
     const [selectProduct, setSelectProduct] = useState(null);
     const [modal, setModal] = useState(false);
     const category = useLoaderData();
-    console.log(category);
 
+    // Load Product by category name
     const { data: products = [], isLoading } = useQuery({
         queryKey: [`category`],
         queryFn: async () => {
-            const res = await fetch(`http://localhost:5000/category?category_name=${category?.name}`);
+            const res = await fetch(`https://car-bazar-server.vercel.app/category?category_name=${category?.name}`);
             const data = await res.json();
             return data;
         }
     });
-
-    console.log(products);
     if (isLoading) {
         return <Loader></Loader>
     }

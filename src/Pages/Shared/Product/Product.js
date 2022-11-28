@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './Product.css';
 import verify from '../../../assets/verified.png';
+import { AuthContext } from '../../../contexts/AuthProvider';
 
 const Product = ({ product, setSelectProduct, setModal }) => {
+    const {user} = useContext(AuthContext);
     const { name, product_photo, resale_price, location, original_price, used_year, seller_name, date_posted, verified } = product;
     return (
         <div className='bg-white shadow p-4 rounded border'>
@@ -30,13 +32,15 @@ const Product = ({ product, setSelectProduct, setModal }) => {
                         <p>Used: {used_year} years</p>
                         <p>Post Date: {date_posted}</p>
                     </div>
-                    <label
+                    {
+                        user ? <label
                         htmlFor="booking-modal"
                         className="btn btn-primary text-white w-full"
                         onClick={()=>{
-                            setModal(true);
-                            setSelectProduct(product)}}
-                    >Book Now</label>
+                        setModal(true);
+                        setSelectProduct(product)}}
+                        >Book Now</label>: <button className='btn btn-disabled w-full'>Book Now</button>
+                    }
                 </div>
 
             </div>

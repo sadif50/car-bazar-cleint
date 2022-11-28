@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { FaCar } from 'react-icons/fa';
 import { AuthContext } from '../../../contexts/AuthProvider';
 import useAdmin from '../../../Hooks/useAdmin';
@@ -7,7 +7,7 @@ import useSeller from '../../../Hooks/useSeller';
 import useBuyer from '../../../Hooks/useBuyer';
 
 const Navbar = () => {
-    const { user, loading, logOut } = useContext(AuthContext);
+    const { user, logOut } = useContext(AuthContext);
     
     // Loading Users Role And Showing Dashboard Route based on it
     const [isAdmin] = useAdmin(user?.email);
@@ -51,10 +51,7 @@ const Navbar = () => {
             </>
         }
     </>;
-    const location = useLocation();
-    if(loading){
-        return '';
-    }
+
     return (
         <div className='bg-slate-100'>
             <div className="navbar w-11/12 mx-auto">
@@ -74,11 +71,11 @@ const Navbar = () => {
                         {menuItem}
                     </ul>
                 </div>
-                {(location.pathname.includes('dashboard')) ? <div className="navbar-end lg:hidden">
+                <div className="navbar-end lg:hidden">
                     <label htmlFor="dashboard-drawer" tabIndex={2} className="btn btn-ghost">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
                     </label>
-                </div> : ''}
+                </div>
             </div>
         </div>
 

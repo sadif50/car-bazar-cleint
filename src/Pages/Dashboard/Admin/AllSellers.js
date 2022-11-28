@@ -8,7 +8,7 @@ const AllSellers = () => {
     const { data: sellers = [], isLoading, refetch } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
-            const res = await fetch('http://localhost:5000/users?role=seller');
+            const res = await fetch('https://car-bazar-server.vercel.app/users?role=seller');
             const data = await res.json();
             return data;
         }
@@ -18,7 +18,7 @@ const AllSellers = () => {
         const verifyData = {
             verified: true
         }
-        fetch(`http://localhost:5000/verifySeller/${id}`, {
+        fetch(`https://car-bazar-server.vercel.app/verifySeller/${id}`, {
             method: 'PATCH',
             headers: {
                 'content-type': 'application/json'
@@ -37,7 +37,7 @@ const AllSellers = () => {
     const deleteUser = id => {
         const agree = window.confirm('Are you sure to delete this seller?');
         if(agree){
-            fetch(`http://localhost:5000/user/${id}`, {
+            fetch(`https://car-bazar-server.vercel.app/user/${id}`, {
                 method: 'DELETE'
             })
             .then(res => res.json())

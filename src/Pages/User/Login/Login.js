@@ -17,7 +17,7 @@ const Login = () => {
     const { data: buyers = [] } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
-            const res = await fetch('http://localhost:5000/users?role=buyer');
+            const res = await fetch('https://car-bazar-server.vercel.app/users?role=buyer');
             const data = await res.json();
             return data;
         }
@@ -28,20 +28,16 @@ const Login = () => {
 
     const from = location.state?.from?.pathname || '/';
 
-    if(token){
-        navigate(from, { replace: true });
-    }
-
     const googleProvider = new GoogleAuthProvider();
 
     const handleLogin = data => {
-        console.log(data);
         logInWithEmail(data.email, data.password)
         .then(result => {
             const user = result.user;
             setUserEmail(user.email);
             reset();
             toast.success('Login Successful.');
+            navigate(from, { replace: true });
         })
         .catch(err => {
             toast.error(err.message);
@@ -67,6 +63,7 @@ const Login = () => {
             else{
                 setUserEmail(user.email);
                 toast.success('Google Login Successful');
+                navigate(from, { replace: true });
             }
         })
         .catch(err => {
@@ -74,7 +71,7 @@ const Login = () => {
         })
     }
     const saveUser = userData => {
-        fetch('http://localhost:5000/users', {
+        fetch('https://car-bazar-server.vercel.app/users', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
@@ -85,6 +82,7 @@ const Login = () => {
         .then(data => {
             setUserEmail(userData.email);
             toast.success('Google Login Successful');
+            navigate(from, { replace: true });
         })
     }
     return (

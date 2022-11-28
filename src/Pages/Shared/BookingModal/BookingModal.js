@@ -9,7 +9,7 @@ const BookingModal = ({ selectProduct, setModal }) => {
     const { user } = useContext(AuthContext);
     const {register, handleSubmit, reset} = useForm();
     const handleBooking = data => {
-        axios.post('http://localhost:5000/booking', {
+        axios.post('https://car-bazar-server.vercel.app/booking', {
             buyer: user?.displayName,
             email: user?.email,
             meeting_location: data?.meeting_location,
@@ -21,7 +21,6 @@ const BookingModal = ({ selectProduct, setModal }) => {
             seller_email: selectProduct?.seller_email
         })
         .then(function(response){
-            console.log(response);
             if(response.data.acknowledged){
                 setModal(false);
                 toast.success('Your Car Booked Successfully!')

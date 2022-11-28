@@ -5,21 +5,20 @@ import { AuthContext } from '../../../contexts/AuthProvider';
 import signImg from '../../../assets/user/signup.png';
 import { toast } from 'react-toastify';
 import useToken from '../../../Hooks/useToken';
+import Loader from '../../Shared/Loader/Loader';
 
 const Signup = () => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const { createUserWithEmail, updateInfo } = useContext(AuthContext);
     const [userEmail, setUserEmail] = useState('');
+    const [loader, setLoader] = useState(false);
     const [token] = useToken(userEmail);
     const navigate = useNavigate();
 
     const imageAPIkey = process.env.REACT_APP_imgbb_key;
 
-    if(token){
-        navigate('/');
-    }
-
     const handleSignUp = (data) => {
+        setLoader(true);
         const image = data.image[0];
         const formData = new FormData();
         formData.append('image', image);
@@ -34,7 +33,6 @@ const Signup = () => {
                     createUserWithEmail(data.email, data.password)
                     .then(res => {
                         const user = res.user;
-                        console.log(user);
                         const uid = user.uid;
                         toast.success('Sign Up Successful.');
                         updateInfo(data.name, imgData.data.url)
@@ -49,10 +47,14 @@ const Signup = () => {
                             }
                             saveUser(userData);
                         })
-                        .catch(err => console.log(err));
+                        .catch(err => {
+                            setLoader(false);
+                            console.log(err)
+                        });
                     })
                     .catch(err => {
                         console.log(err);
+                        setLoader(false);
                         toast.error(err.message)
                     });
                 }
@@ -61,7 +63,7 @@ const Signup = () => {
 
     }
     const saveUser = userData => {
-        fetch('http://localhost:5000/users', {
+        fetch('https://car-bazar-server.vercel.app/users', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
@@ -71,9 +73,15 @@ const Signup = () => {
         .then(res => res.json())
         .then(data => {
             setUserEmail(userData.email);
-            fetch('http://localhost:5000/users')
+            fetch('https://car-bazar-server.vercel.app/users')
             reset();
+            navigate('/');
+            setLoader(false);
+
         })
+    }
+    if(loader){
+        return <Loader></Loader>
     }
     return (
         <div className='py-10 w-11/12 mx-auto'>
