@@ -12,10 +12,12 @@ const Addproduct = () => {
     const [loader, setLoader] = useState(false);
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
+    // image server api
     const imageHostKey = process.env.REACT_APP_imgbb_key;
 
     const navigate = useNavigate();
 
+    // Fetch categories
     const { data: categories = [] } = useQuery({
         queryKey: ['categories'],
         queryFn: async () => {
@@ -25,6 +27,7 @@ const Addproduct = () => {
         }
     });
 
+    // Fetch current user data
     const { data: userData = [], isLoading } = useQuery({
         queryKey: [`user`],
         queryFn: async () => {
@@ -34,12 +37,19 @@ const Addproduct = () => {
         }
     });
 
+    // handle add product
     const addProduct = data => {
+
+        // only seller can submit this form
         if((userData?.role === 'seller') && !isLoading){
             setLoader(true);
+
+            // upload image
             const image = data.product_photo[0];
             const formData = new FormData();
             formData.append('image', image);
+
+            // send image to image server
             const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`
             fetch(url, {
                 method: 'POST',
@@ -48,6 +58,8 @@ const Addproduct = () => {
             .then(res => res.json())
             .then(imgData => {
                 if(imgData.success){
+
+                    // products data
                     const productData = {
                         name: data.name,
                         resale_price: data.resale_price,
@@ -69,6 +81,7 @@ const Addproduct = () => {
                         advertise: false,
                         sold: false
                     }
+                    // call the function to save product info
                     saveProduct(productData);
                     reset();
                 }
@@ -79,6 +92,8 @@ const Addproduct = () => {
             reset();
         }
     }
+
+    // save product handler
     const saveProduct = productData => {
         fetch('https://car-bazar-server.vercel.app/addProduct', {
             method: 'POST',
@@ -92,10 +107,13 @@ const Addproduct = () => {
             if(data.acknowledged){
                 toast.success('Product Added SuccessFully.');
                 setLoader(false);
+
+                // navigate to my products
                 navigate('/dashboard/myProducts');
             }
         })
     }
+
     if(loader){
         return <Loader></Loader>
     }

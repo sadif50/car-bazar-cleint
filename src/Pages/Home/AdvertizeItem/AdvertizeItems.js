@@ -6,6 +6,8 @@ import Product from '../../Shared/Product/Product';
 const AdvertizeItems = () => {
     const [selectProduct, setSelectProduct] = useState(null);
     const [modal, setModal] = useState(false);
+
+    // load advertised and unsold products
     const { data: products = [] } = useQuery({
         queryKey: ['products'],
         queryFn: async () => {
@@ -14,6 +16,8 @@ const AdvertizeItems = () => {
             return data;
         }
     });
+
+    // if no product advertise section hide
     if(products.length < 1){
         return <hr />;
     }

@@ -8,11 +8,11 @@ import useBuyer from '../../../Hooks/useBuyer';
 
 const Navbar = () => {
     const { user, logOut } = useContext(AuthContext);
-    
+
     // Loading Users Role And Showing Dashboard Route based on it
-    const [isAdmin] = useAdmin(user?.email);
-    const [isSeller] = useSeller(user?.email);
-    const [isBuyer] = useBuyer(user?.email);
+    const [isAdmin, isAdminLoading] = useAdmin(user?.email);
+    const [isSeller, isSellerLoading] = useSeller(user?.email);
+    const [isBuyer, isBuyerLoading] = useBuyer(user?.email);
 
     const menuItem = <>
         <li className='rounded lg:ml-4'>
@@ -22,33 +22,49 @@ const Navbar = () => {
             <NavLink className='rounded font-semibold' to='/blog'>Blog</NavLink>
         </li>
         {
-            user ? <>
-                {
-                    isBuyer && <li className='rounded lg:ml-4'>
-                        <NavLink className='rounded font-semibold' to='/dashboard/myorders'>Dashboard</NavLink>
-                    </li>
+            user ?
+                <> 
+                {   (isAdminLoading || isSellerLoading || isBuyerLoading) ?
+                        <>
+                            <li className='rounded lg:ml-4'>
+                                <NavLink className='rounded font-semibold' to='/dashboard'>Dashboard</NavLink>
+                            </li>
+                            <li className='rounded lg:ml-4' onClick={() => logOut()}>
+                                <Link className='rounded font-semibold'>Sign Out</Link>
+                            </li>
+                        </>
+                        :
+                        <>
+                            {
+                                isBuyer && <li className='rounded lg:ml-4'>
+                                    <NavLink className='rounded font-semibold' to='/dashboard/myorders'>Dashboard</NavLink>
+                                </li>
+                            }
+                            {
+                                isSeller && <li className='rounded lg:ml-4'>
+                                    <NavLink className='rounded font-semibold' to='/dashboard/addProduct'>Dashboard</NavLink>
+                                </li>
+                            }
+                            {
+                                isAdmin && <li className='rounded lg:ml-4'>
+                                    <NavLink className='rounded font-semibold' to='/dashboard/allSellers'>Dashboard</NavLink>
+                                </li>
+                            }
+                            <li className='rounded lg:ml-4' onClick={() => logOut()}>
+                                <Link className='rounded font-semibold'>Sign Out</Link>
+                            </li>
+                        </>
                 }
-                {
-                    isSeller && <li className='rounded lg:ml-4'>
-                        <NavLink className='rounded font-semibold' to='/dashboard/addProduct'>Dashboard</NavLink>
+                </>
+                :
+                <>
+                    <li className='rounded lg:ml-4'>
+                        <Link className='rounded font-semibold' to='/login'>Login</Link>
                     </li>
-                }
-                {
-                    isAdmin && <li className='rounded lg:ml-4'>
-                        <NavLink className='rounded font-semibold' to='/dashboard/allSellers'>Dashboard</NavLink>
+                    <li className='rounded lg:ml-4'>
+                        <Link className='rounded font-semibold' to='/signup'>Sign Up</Link>
                     </li>
-                }
-                <li className='rounded lg:ml-4' onClick={() => logOut()}>
-                    <Link className='rounded font-semibold'>Sign Out</Link>
-                </li>
-            </> : <>
-                <li className='rounded lg:ml-4'>
-                    <Link className='rounded font-semibold' to='/login'>Login</Link>
-                </li>
-                <li className='rounded lg:ml-4'>
-                    <Link className='rounded font-semibold' to='/signup'>Sign Up</Link>
-                </li>
-            </>
+                </>
         }
     </>;
 

@@ -6,6 +6,8 @@ import Loader from '../../Shared/Loader/Loader';
 
 const MyProducts = () => {
     const { user } = useContext(AuthContext);
+
+    // Load my products
     const { data: products = [], isLoading, refetch } = useQuery({
         queryKey: [`product`],
         queryFn: async () => {
@@ -15,6 +17,7 @@ const MyProducts = () => {
         }
     });
 
+    // delete product handler
     const deleteProduct = id => {
         const agree = window.confirm('Are you sure to delete this product?');
         if(agree){
@@ -32,6 +35,7 @@ const MyProducts = () => {
         }
     }
 
+    // make product advertised handler
     const advertiseProduct = id => {
         const updatedData = {
             advertise: true

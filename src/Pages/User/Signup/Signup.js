@@ -15,10 +15,14 @@ const Signup = () => {
     const [token] = useToken(userEmail);
     const navigate = useNavigate();
 
+    // Image host api key
     const imageAPIkey = process.env.REACT_APP_imgbb_key;
 
+    // sign up with email and password
     const handleSignUp = (data) => {
         setLoader(true);
+
+        // save image to image host
         const image = data.image[0];
         const formData = new FormData();
         formData.append('image', image);
@@ -30,6 +34,8 @@ const Signup = () => {
             .then(res => res.json())
             .then(imgData => {
                 if (imgData.success) {
+
+                    // crate user
                     createUserWithEmail(data.email, data.password)
                     .then(res => {
                         const user = res.user;
@@ -37,6 +43,8 @@ const Signup = () => {
                         toast.success('Sign Up Successful.');
                         updateInfo(data.name, imgData.data.url)
                         .then(() => {
+
+                            // user data set
                             const userData = {
                                 name: data.name,
                                 email: data.email,
@@ -45,6 +53,7 @@ const Signup = () => {
                                 verified: false,
                                 uid: uid
                             }
+                            // call saveUser to save user data to db.
                             saveUser(userData);
                         })
                         .catch(err => {
@@ -62,6 +71,8 @@ const Signup = () => {
 
 
     }
+
+    // handle save user
     const saveUser = userData => {
         fetch('https://car-bazar-server.vercel.app/users', {
             method: 'POST',

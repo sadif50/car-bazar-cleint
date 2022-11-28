@@ -3,6 +3,8 @@ import React from 'react';
 import Category from './Category';
 
 const Categories = () => {
+    
+    // fetch categories
     const { data: categories = [] } = useQuery({
         queryKey: ['categories'],
         queryFn: async () => {

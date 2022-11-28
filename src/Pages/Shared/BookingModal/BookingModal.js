@@ -8,7 +8,10 @@ import { toast } from 'react-toastify';
 const BookingModal = ({ selectProduct, setModal }) => {
     const { user } = useContext(AuthContext);
     const {register, handleSubmit, reset} = useForm();
+
+    // handle booking function
     const handleBooking = data => {
+        // Post data using axios
         axios.post('https://car-bazar-server.vercel.app/booking', {
             buyer: user?.displayName,
             email: user?.email,
@@ -16,6 +19,7 @@ const BookingModal = ({ selectProduct, setModal }) => {
             phone: data?.phone,
             price: selectProduct?.resale_price,
             product_name: selectProduct?.name,
+            image: selectProduct?.product_photo,
             booked_at: format(new Date(), 'PP'),
             seller: selectProduct?.seller_name,
             seller_email: selectProduct?.seller_email

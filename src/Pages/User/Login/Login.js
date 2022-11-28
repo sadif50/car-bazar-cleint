@@ -14,6 +14,7 @@ const Login = () => {
     const [userEmail, setUserEmail] = useState('');
     const [token] = useToken(userEmail);
 
+    // get the buyer to check google login user already in
     const { data: buyers = [] } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
@@ -23,13 +24,15 @@ const Login = () => {
         }
     });
 
+    // Navigation data
     const location = useLocation();
     const navigate = useNavigate();
-
     const from = location.state?.from?.pathname || '/';
 
+    // google login provider
     const googleProvider = new GoogleAuthProvider();
 
+    // handle email password based login
     const handleLogin = data => {
         logInWithEmail(data.email, data.password)
         .then(result => {
@@ -44,10 +47,13 @@ const Login = () => {
         })
     }
 
+    // Handle google login
     const logInWithGoogle = () => {
         googleProviderLogIn(googleProvider)
         .then(result => {
             const user = result.user;
+
+            // check the user already exist on server to avoid multi input
             const alreadyUser = buyers.find(buyer => buyer.email === user.email);
             if(!alreadyUser){
                 const userData = {
@@ -70,6 +76,8 @@ const Login = () => {
             toast.error(err.message);
         })
     }
+
+    // save google logged in user
     const saveUser = userData => {
         fetch('https://car-bazar-server.vercel.app/users', {
             method: 'POST',

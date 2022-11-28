@@ -5,6 +5,7 @@ import Loader from '../../Shared/Loader/Loader';
 
 const AllSellers = () => {
     
+    // fetch seller profiles using query
     const { data: sellers = [], isLoading, refetch } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
@@ -14,6 +15,7 @@ const AllSellers = () => {
         }
     });
 
+    // handle verify seller
     const handleVerify = id => {
         const verifyData = {
             verified: true
@@ -34,6 +36,7 @@ const AllSellers = () => {
         })
     }
 
+    // Delete Seller
     const deleteUser = id => {
         const agree = window.confirm('Are you sure to delete this seller?');
         if(agree){
