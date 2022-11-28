@@ -71,6 +71,7 @@ const Signup = () => {
         .then(res => res.json())
         .then(data => {
             setUserEmail(userData.email);
+            fetch('http://localhost:5000/users')
             reset();
         })
     }

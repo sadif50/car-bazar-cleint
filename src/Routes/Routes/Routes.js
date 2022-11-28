@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import DashBoardLayout from "../../Layout/DashBoardLayout";
 import Main from "../../Layout/Main";
+import Blog from "../../Pages/Blog/Blog";
 import CategoryProducts from "../../Pages/CategoryProducts/CategoryProducts";
 import AllBuyers from "../../Pages/Dashboard/Admin/AllBuyers";
 import AllSellers from "../../Pages/Dashboard/Admin/AllSellers";
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
                 path: '/category/:id',
                 element: <PrivateRoute><CategoryProducts></CategoryProducts></PrivateRoute>,
                 loader: ({params})=>fetch(`http://localhost:5000/category/${params.id}`)
+            },
+            {
+                path: 'blog',
+                element: <Blog></Blog>
             }
         ]
     },

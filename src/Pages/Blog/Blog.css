@@ -1,0 +1,4 @@
+.custom_table tr td, .custom_table tr th {
+    border: 1px solid #000;
+    padding: 5px;
+}

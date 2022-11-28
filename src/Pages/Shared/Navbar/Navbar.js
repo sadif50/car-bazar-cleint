@@ -7,7 +7,7 @@ import useSeller from '../../../Hooks/useSeller';
 import useBuyer from '../../../Hooks/useBuyer';
 
 const Navbar = () => {
-    const { user, logOut } = useContext(AuthContext);
+    const { user, loading, logOut } = useContext(AuthContext);
     
     // Loading Users Role And Showing Dashboard Route based on it
     const [isAdmin] = useAdmin(user?.email);
@@ -52,6 +52,9 @@ const Navbar = () => {
         }
     </>;
     const location = useLocation();
+    if(loading){
+        return '';
+    }
     return (
         <div className='bg-slate-100'>
             <div className="navbar w-11/12 mx-auto">

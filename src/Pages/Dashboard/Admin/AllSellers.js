@@ -1,9 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
+import { FaCheckCircle } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 import Loader from '../../Shared/Loader/Loader';
 
 const AllSellers = () => {
     
-    const { data: sellers = [], isLoading } = useQuery({
+    const { data: sellers = [], isLoading, refetch } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
             const res = await fetch('http://localhost:5000/users?role=seller');
@@ -11,6 +13,43 @@ const AllSellers = () => {
             return data;
         }
     });
+
+    const handleVerify = id => {
+        const verifyData = {
+            verified: true
+        }
+        fetch(`http://localhost:5000/verifySeller/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(verifyData)
+        })
+        .then(res=>res.json())
+        .then(data => {
+            if(data.modifiedCount > 0){
+                toast.success('Seller Verified SuccessFully.');
+                refetch();
+            }
+        })
+    }
+
+    const deleteUser = id => {
+        const agree = window.confirm('Are you sure to delete this seller?');
+        if(agree){
+            fetch(`http://localhost:5000/user/${id}`, {
+                method: 'DELETE'
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.deletedCount > 0) {
+                    toast.success('Seller Delete Successful.');
+                    refetch();
+                }
+            })
+            .catch(err => console.log(err));
+        }
+    }
     
     if(isLoading){
         return <Loader></Loader>
@@ -43,9 +82,15 @@ const AllSellers = () => {
                                         seller?.verified ? 'Verified' : 'Not Verified'
                                     }
                                 </td>
-                                <td><button className='btn-sm btn-secondary rounded'>Verify</button></td>
                                 <td>
-                                    <button className='btn-sm btn-error rounded'>Delete</button>
+                                    {
+                                        seller?.verified ? <button className='flex items-center btn-sm btn-success rounded' disabled><FaCheckCircle/>&nbsp;Verified</button> 
+                                        :
+                                        <button onClick={()=>handleVerify(seller._id)} className='btn-sm btn-info rounded'>Verify</button>
+                                    }
+                                </td>
+                                <td>
+                                    <button onClick={()=>deleteUser(seller._id)} className='btn-sm btn-error rounded'>Delete</button>
                                 </td>
                             </tr>)
                         }
